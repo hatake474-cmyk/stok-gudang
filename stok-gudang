@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Stok Gudang</title>
+
+<style>
+body {
+  font-family: system-ui;
+  background:#f6f7fb;
+  margin:0;
+  padding:15px;
+}
+
+.container {
+  max-width: 1100px;
+  margin:auto;
+}
+
+h2 {
+  text-align:center;
+}
+
+.search {
+  width:100%;
+  padding:12px;
+  border-radius:8px;
+  border:1px solid #ddd;
+  margin-bottom:15px;
+}
+
+.table-box {
+  background:white;
+  border-radius:12px;
+  padding:10px;
+  overflow:auto;
+  box-shadow:0 5px 10px rgba(0,0,0,.05);
+}
+
+table {
+  width:100%;
+  border-collapse:collapse;
+}
+
+th {
+  background:#fafafa;
+  padding:10px;
+  text-align:left;
+  font-size:14px;
+}
+
+td {
+  padding:10px;
+  border-top:1px solid #eee;
+  font-size:14px;
+}
+
+tr:hover {
+  background:#f1f5ff;
+}
+</style>
+
+</head>
+<body>
+
+<div class="container">
+
+<h2>📦 Stok Gudang</h2>
+
+<input class="search" id="search" placeholder="Cari barang..." onkeyup="filterData()">
+
+<div class="table-box">
+<table id="table">
+<thead></thead>
+<tbody></tbody>
+</table>
+</div>
+
+</div>
+
+<script>
+
+const const API_URL = "https://script.google.com/macros/s/AKfycbz-5sJLcRzLDI2SSOYr4fSI8R756ps0sjMBwQQjQ6Vd4kZJeGay4eaGRE0KvUM4mA337Q/exec";
+
+
+fetch(API_URL)
+.then(res => res.json())
+.then(data => {
+
+  const thead = document.querySelector("#table thead");
+  const tbody = document.querySelector("#table tbody");
+
+  let headerRow = "<tr>";
+  Object.keys(data[0]).forEach(key => {
+    headerRow += `<th>${key}</th>`;
+  });
+  headerRow += "</tr>";
+
+  thead.innerHTML = headerRow;
+
+  data.forEach(row => {
+    let tr = "<tr>";
+    Object.values(row).forEach(val => {
+      tr += `<td>${val}</td>`;
+    });
+    tr += "</tr>";
+    tbody.innerHTML += tr;
+  });
+
+});
+
+function filterData(){
+  let input = document.getElementById("search").value.toLowerCase();
+  let rows = document.querySelectorAll("#table tbody tr");
+
+  rows.forEach(row => {
+    row.style.display = row.innerText.toLowerCase().includes(input)
+      ? ""
+      : "none";
+  });
+}
+
+</script>
+
+</body>
+</html>
